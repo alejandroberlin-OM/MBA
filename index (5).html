@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misraji &amp; Béjar — Abogados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream:    #f8f5ef;
+  --white:    #ffffff;
+  --navy:     #1a2744;
+  --navy-mid: #2c3e6b;
+  --rust:     #b84c2b;
+  --rust-lt:  #d4623e;
+  --stone:    #8a8075;
+  --rule:     rgba(26,39,68,0.12);
+  --rule-mid: rgba(26,39,68,0.2);
+  --ff-serif: 'Playfair Display', Georgia, serif;
+  --ff-sans:  'DM Sans', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--cream); color: var(--navy); font-family: var(--ff-sans); font-weight: 300; overflow-x: hidden; }
+
+/* ── NAV ─────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 56px;
+  background: rgba(248,245,239,0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 24px rgba(26,39,68,0.08); }
+.nav-logo {
+  display: flex; flex-direction: column; gap: 1px;
+  text-decoration: none;
+}
+.nav-logo-main {
+  font-family: var(--ff-serif); font-size: 1.05rem; font-weight: 700;
+  letter-spacing: 0.02em; color: var(--navy); line-height: 1;
+}
+.nav-logo-sub {
+  font-size: 0.52rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--rust); font-weight: 500;
+}
+.nav-right { display: flex; align-items: center; gap: 44px; }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 0.68rem; letter-spacing: 0.1em; font-weight: 400;
+  color: var(--navy); text-decoration: none; opacity: 0.6;
+  transition: opacity 0.2s, color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; bottom: -3px;
+  width: 0; height: 1px; background: var(--rust);
+  transition: width 0.25s;
+}
+.nav-links a:hover { opacity: 1; }
+.nav-links a:hover::after { width: 100%; }
+
+/* LANG TOGGLE */
+.lang-toggle { display: flex; align-items: center; gap: 0; }
+.lang-btn {
+  padding: 5px 12px; font-family: var(--ff-sans);
+  font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500;
+  background: transparent; border: 1px solid var(--rule-mid); cursor: pointer;
+  color: var(--navy); opacity: 0.45; transition: all 0.2s;
+}
+.lang-btn:first-child { border-right: none; }
+.lang-btn.active { background: var(--navy); color: var(--white); opacity: 1; border-color: var(--navy); }
+.lang-btn:not(.active):hover { opacity: 0.8; background: rgba(26,39,68,0.05); }
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 78px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-left {
+  background: var(--navy);
+  padding: 80px 56px 80px 56px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+}
+.hero-left-pattern {
+  position: absolute; inset: 0; opacity: 0.04;
+  background-image:
+    linear-gradient(var(--white) 1px, transparent 1px),
+    linear-gradient(90deg, var(--white) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hero-left-number {
+  font-family: var(--ff-serif); font-size: clamp(10rem, 18vw, 22rem);
+  font-weight: 900; font-style: italic; line-height: 0.85;
+  color: rgba(255,255,255,0.05); position: absolute;
+  bottom: -20px; right: -10px; pointer-events: none;
+  user-select: none;
+}
+.hero-eyebrow {
+  font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--rust); font-weight: 500;
+  display: flex; align-items: center; gap: 14px;
+  opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--rust); }
+.hero-title-block {
+  position: relative; z-index: 2;
+  opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero-title {
+  font-family: var(--ff-serif);
+  font-size: clamp(3.2rem, 6vw, 6rem);
+  font-weight: 400; line-height: 1.0;
+  color: var(--white); letter-spacing: -0.01em;
+}
+.hero-title span { display: block; }
+.hero-title .italic { font-style: italic; color: rgba(255,255,255,0.55); }
+.hero-rule { width: 40px; height: 2px; background: var(--rust); margin: 28px 0; }
+.hero-tagline {
+  font-size: 0.8rem; line-height: 1.85; color: rgba(255,255,255,0.5);
+  max-width: 340px; font-weight: 300;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 13px 28px;
+  background: var(--rust); color: var(--white);
+  font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+  text-decoration: none;
+  transition: background 0.25s, transform 0.25s;
+  align-self: flex-start;
+  opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+}
+.hero-cta:hover { background: var(--rust-lt); transform: translateY(-1px); }
+.hero-right {
+  background: var(--white);
+  padding: 80px 56px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative;
+}
+.hero-right-label {
+  position: absolute; top: 80px; left: 56px;
+  font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--stone); font-weight: 500;
+  opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+}
+.hero-right-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border-top: 1px solid var(--rule-mid);
+  opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+}
+.hero-stat {
+  padding: 36px 0 36px 0;
+  border-bottom: 1px solid var(--rule-mid);
+  position: relative;
+}
+.hero-stat:nth-child(odd) { padding-right: 32px; border-right: 1px solid var(--rule-mid); }
+.hero-stat:nth-child(even) { padding-left: 32px; }
+.hero-stat-num {
+  font-family: var(--ff-serif); font-size: 3rem; font-weight: 700;
+  color: var(--navy); line-height: 1;
+}
+.hero-stat-num sup { font-size: 1.2rem; font-weight: 400; vertical-align: super; }
+.hero-stat-label { font-size: 0.62rem; color: var(--stone); margin-top: 6px; line-height: 1.5; }
+.hero-right-quote {
+  margin-top: 52px;
+  opacity: 0; animation: fadeUp 0.8s 1s forwards;
+}
+.hero-right-quote blockquote {
+  font-family: var(--ff-serif); font-size: 1.25rem; font-weight: 400; font-style: italic;
+  line-height: 1.55; color: var(--navy); max-width: 380px;
+}
+.hero-right-quote cite {
+  display: block; margin-top: 14px;
+  font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--stone); font-style: normal;
+}
+
+/* ── ABOUT ─────────────────────────────────────────────── */
+#about {
+  background: var(--cream);
+  padding: 120px 56px;
+  border-top: 1px solid var(--rule-mid);
+  display: grid; grid-template-columns: 240px 1fr; gap: 80px;
+}
+.sticky-label {
+  padding-top: 6px;
+}
+.sticky-label .sl-num {
+  font-family: var(--ff-serif); font-size: 4.5rem; font-weight: 900;
+  color: rgba(26,39,68,0.07); line-height: 1;
+}
+.sticky-label .sl-text {
+  font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--rust); font-weight: 500; margin-top: -8px;
+}
+.about-content { max-width: 760px; }
+.about-heading {
+  font-family: var(--ff-serif); font-size: clamp(2.4rem, 4vw, 4rem);
+  font-weight: 400; line-height: 1.1; letter-spacing: -0.02em;
+  margin-bottom: 40px;
+}
+.about-heading em { font-style: italic; color: var(--rust); }
+.about-body { font-size: 0.88rem; line-height: 1.95; color: var(--navy); opacity: 0.7; }
+.about-body p + p { margin-top: 20px; }
+.about-rule { width: 32px; height: 2px; background: var(--rust); margin: 40px 0; }
+
+/* ── PRACTICE ──────────────────────────────────────────── */
+#practice {
+  background: var(--white);
+  padding: 120px 56px;
+  border-top: 1px solid var(--rule-mid);
+  display: grid; grid-template-columns: 240px 1fr; gap: 80px;
+}
+.practice-heading {
+  font-family: var(--ff-serif); font-size: clamp(2.4rem, 4vw, 4rem);
+  font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.practice-heading em { font-style: italic; color: var(--rust); }
+.practice-intro-text { font-size: 0.82rem; line-height: 1.85; opacity: 0.6; max-width: 540px; margin-bottom: 56px; }
+.practice-list { display: flex; flex-direction: column; }
+.practice-item {
+  display: grid; grid-template-columns: 48px 1fr auto;
+  align-items: baseline; gap: 24px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+  cursor: default;
+  transition: background 0.2s;
+}
+.practice-item::before {
+  content: ''; position: absolute; left: -56px; top: 0; bottom: 0; width: 0;
+  background: rgba(184,76,43,0.04);
+  transition: width 0.3s;
+}
+.practice-item:hover::before { width: calc(100% + 112px); }
+.practice-item:first-child { border-top: 1px solid var(--rule); }
+.pi-num { font-family: var(--ff-serif); font-size: 0.75rem; color: var(--rust); opacity: 0.6; font-weight: 400; }
+.pi-body {}
+.pi-name { font-family: var(--ff-serif); font-size: 1.6rem; font-weight: 400; color: var(--navy); margin-bottom: 8px; }
+.pi-desc { font-size: 0.75rem; line-height: 1.8; color: var(--stone); max-width: 520px; }
+.pi-arrow {
+  font-size: 1.2rem; color: var(--rust); opacity: 0; transform: translateX(-8px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+.practice-item:hover .pi-arrow { opacity: 1; transform: translateX(0); }
+
+/* ── TEAM ──────────────────────────────────────────────── */
+#team {
+  background: var(--cream);
+  padding: 120px 56px;
+  border-top: 1px solid var(--rule-mid);
+  display: grid; grid-template-columns: 240px 1fr; gap: 80px;
+}
+.team-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.team-card {
+  background: var(--white);
+  padding: 52px 44px;
+  position: relative;
+  transition: box-shadow 0.3s;
+}
+.team-card:hover { box-shadow: 0 8px 40px rgba(26,39,68,0.08); }
+.tc-bar { width: 28px; height: 3px; background: var(--rust); margin-bottom: 32px; }
+.tc-name { font-family: var(--ff-serif); font-size: 2rem; font-weight: 400; line-height: 1.05; color: var(--navy); margin-bottom: 4px; }
+.tc-role { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--rust); font-weight: 500; margin-bottom: 24px; }
+.tc-bio { font-size: 0.77rem; line-height: 1.9; color: var(--navy); opacity: 0.65; }
+.tc-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 24px; }
+.tc-tag {
+  font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 5px 12px; border: 1px solid var(--rule-mid);
+  color: var(--navy); opacity: 0.6;
+}
+.tc-edu { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--rule); }
+.tc-edu-item { font-size: 0.68rem; line-height: 1.7; color: var(--stone); margin-bottom: 3px; }
+.tc-edu-item strong { color: var(--navy); font-weight: 500; }
+.tc-awards { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+.tc-award {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.62rem; color: var(--rust);
+}
+.tc-award::before { content: ''; width: 16px; height: 1px; background: var(--rust); flex-shrink: 0; }
+
+/* ── RECOGNITION ───────────────────────────────────────── */
+#recognitions {
+  background: var(--navy);
+  padding: 120px 56px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: grid; grid-template-columns: 240px 1fr; gap: 80px;
+}
+#recognitions .sticky-label .sl-num { color: rgba(255,255,255,0.06); }
+#recognitions .sticky-label .sl-text { color: rgba(184,76,43,0.9); }
+.recog-heading {
+  font-family: var(--ff-serif); font-size: clamp(2.4rem, 4vw, 4rem);
+  font-weight: 400; line-height: 1.1; letter-spacing: -0.02em;
+  color: var(--white); margin-bottom: 56px;
+}
+.recog-heading em { font-style: italic; color: rgba(255,255,255,0.35); }
+.recog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.recog-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 40px 36px;
+  transition: background 0.25s;
+}
+.recog-card:hover { background: rgba(255,255,255,0.07); }
+.rc-org { font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--rust); margin-bottom: 12px; font-weight: 500; }
+.rc-award { font-family: var(--ff-serif); font-size: 1.25rem; font-weight: 400; color: var(--white); line-height: 1.25; margin-bottom: 10px; }
+.rc-detail { font-size: 0.7rem; line-height: 1.75; color: rgba(255,255,255,0.4); }
+
+/* ── CONTACT ───────────────────────────────────────────── */
+#contact {
+  background: var(--cream);
+  padding: 120px 56px;
+  border-top: 1px solid var(--rule-mid);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.contact-heading {
+  font-family: var(--ff-serif); font-size: clamp(2.8rem, 5vw, 5rem);
+  font-weight: 400; line-height: 1.0; letter-spacing: -0.02em;
+  color: var(--navy);
+}
+.contact-heading em { font-style: italic; color: var(--rust); }
+.contact-sub { font-size: 0.8rem; line-height: 1.9; opacity: 0.6; margin-top: 28px; max-width: 360px; }
+.contact-rust-rule { width: 32px; height: 2px; background: var(--rust); margin: 36px 0; }
+.cta-link {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 0.64rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+  color: var(--rust); text-decoration: none;
+  transition: gap 0.2s;
+}
+.cta-link:hover { gap: 18px; }
+.contact-details { display: flex; flex-direction: column; gap: 44px; }
+.cd-block {}
+.cd-label { font-size: 0.52rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--stone); font-weight: 500; margin-bottom: 10px; }
+.cd-value { font-family: var(--ff-serif); font-size: 1.2rem; font-weight: 400; color: var(--navy); line-height: 1.5; }
+.cd-value a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.cd-value a:hover { color: var(--rust); }
+.cd-hint { font-size: 0.6rem; color: var(--stone); margin-top: 4px; }
+.btn-send {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 13px 28px; background: var(--navy); color: var(--white);
+  font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+  text-decoration: none; transition: background 0.25s, transform 0.25s; align-self: flex-start;
+}
+.btn-send:hover { background: var(--navy-mid); transform: translateY(-1px); }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+footer {
+  background: var(--navy);
+  padding: 32px 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.58rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.35);
+}
+footer a { color: inherit; text-decoration: none; }
+footer a:hover { color: rgba(255,255,255,0.7); }
+
+/* ── ANIMATIONS ──────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  nav { padding: 20px 32px; }
+  .nav-links { gap: 24px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { min-height: 60vh; }
+  .hero-right { padding-top: 56px; }
+  #about, #practice, #team, #recognitions, #contact { padding: 80px 32px; }
+  #about, #practice, #team, #recognitions { grid-template-columns: 1fr; gap: 40px; }
+  .team-cards { grid-template-columns: 1fr; }
+  .recog-grid { grid-template-columns: 1fr; }
+  #contact { grid-template-columns: 1fr; gap: 56px; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-right { gap: 16px; }
+  .practice-item { grid-template-columns: 36px 1fr; }
+  .pi-arrow { display: none; }
+}
+@media (max-width: 520px) {
+  nav { padding: 18px 20px; }
+  #about, #practice, #team, #recognitions, #contact { padding: 60px 20px; }
+  .hero-left, .hero-right { padding: 52px 20px; }
+  footer { flex-direction: column; gap: 10px; text-align: center; padding: 28px 20px; }
+  .hero-right-stats { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="#">
+    <span class="nav-logo-main">Misraji &amp; Béjar</span>
+    <span class="nav-logo-sub">Abogados · Santiago</span>
+  </a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#about"          data-en="The Firm"       data-es="El Estudio">The Firm</a></li>
+      <li><a href="#practice"       data-en="Practice"       data-es="Practica">Practice</a></li>
+      <li><a href="#team"           data-en="Our Team"       data-es="El Equipo">Our Team</a></li>
+      <li><a href="#contact"        data-en="Contact"        data-es="Contacto">Contact</a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn"        data-lang="es">ES</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-left-pattern"></div>
+    <div class="hero-left-number" aria-hidden="true">MB</div>
+    <p class="hero-eyebrow" data-en="Business Law · Santiago, Chile" data-es="Derecho de los Negocios · Santiago, Chile">Business Law · Santiago, Chile</p>
+    <div class="hero-title-block">
+      <h1 class="hero-title">
+        <span>Misraji</span>
+        <span class="italic">&amp; Béjar</span>
+      </h1>
+      <div class="hero-rule"></div>
+      <p class="hero-tagline"
+        data-en="A boutique firm specializing in business law. Corporate transactions, tax structuring, real estate, and M&amp;A."
+        data-es="Un estudio boutique especializado en derecho de los negocios. Transacciones corporativas, estructuracion tributaria, inmobiliario y M&amp;A.">
+        A boutique firm specializing in business law. Corporate transactions, tax structuring, real estate, and M&amp;A.
+      </p>
+    </div>
+    <a href="#contact" class="hero-cta" id="btn-cta">
+      <span data-en="Get in touch" data-es="Contactenos">Get in touch</span>
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M11 1l4 4-4 4M0 5h15" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+  <div class="hero-right">
+    <p class="hero-right-label" data-en="At a glance" data-es="En cifras">At a glance</p>
+    <div class="hero-right-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">10<sup>+</sup></div>
+        <div class="hero-stat-label" data-en="Years combined experience" data-es="Anos de experiencia combinada">Years combined experience</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label" data-en="Core practice areas" data-es="Areas de practica">Core practice areas</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3<sup>x</sup></div>
+        <div class="hero-stat-label" data-en="International rankings" data-es="Rankings internacionales">International rankings</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">2</div>
+        <div class="hero-stat-label" data-en="Founding partners" data-es="Socios fundadores">Founding partners</div>
+      </div>
+    </div>
+    <div class="hero-right-quote">
+      <blockquote
+        data-en='"Good legal counsel goes further than expertise. It requires a genuine partnership with the client."'
+        data-es='"Una buena asesoria legal va mas alla de la tecnica. Requiere una verdadera alianza con el cliente."'>
+        "Good legal counsel goes further than expertise. It requires a genuine partnership with the client."
+      </blockquote>
+      <cite data-en="Misraji &amp; Béjar, founding principle" data-es="Misraji &amp; Béjar, principio fundacional">Misraji &amp; Béjar, founding principle</cite>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sticky-label reveal">
+    <div class="sl-num">01</div>
+    <div class="sl-text" data-en="The Firm" data-es="El Estudio">The Firm</div>
+  </div>
+  <div class="about-content">
+    <h2 class="about-heading reveal"
+      data-en="Law shaped around <em>your</em> business"
+      data-es="Derecho al servicio de <em>su</em> negocio">
+      Law shaped around <em>your</em> business
+    </h2>
+    <div class="about-body reveal reveal-d1">
+      <p data-en="Misraji &amp; Béjar is a boutique law firm specializing in business law. We build tailored legal solutions for each client, not standard formulas." data-es="Misraji &amp; Béjar es un estudio boutique especializado en derecho de los negocios. Construimos soluciones legales a la medida de cada cliente, sin formulas estandar.">Misraji &amp; Béjar is a boutique law firm specializing in business law. We build tailored legal solutions for each client, not standard formulas.</p>
+      <p data-en="Founded by two senior partners with deep roots in Chile's most prestigious legal and financial institutions, the firm combines technical rigor with a partner-led model that guarantees direct, senior-level attention at every stage." data-es="Fundado por dos socios con trayectoria en las instituciones juridicas y financieras mas reconocidas de Chile, el estudio combina rigor tecnico con un modelo donde los socios lideran personalmente cada asunto.">Founded by two senior partners with deep roots in Chile's most prestigious legal and financial institutions, the firm combines technical rigor with a partner-led model that guarantees direct, senior-level attention at every stage.</p>
+      <p data-en="From cross-border M&amp;A to tax structuring, real estate, and regulatory compliance, the firm works at the intersection of law and business strategy, serving entrepreneurs, family offices, and corporations across Latin America." data-es="Desde M&amp;A transfronterizo hasta estructuracion tributaria, desarrollo inmobiliario y compliance, el estudio opera en la interseccion del derecho y la estrategia de negocios, sirviendo a empresas y familias en toda America Latina.">From cross-border M&amp;A to tax structuring, real estate, and regulatory compliance, the firm works at the intersection of law and business strategy, serving entrepreneurs, family offices, and corporations across Latin America.</p>
+    </div>
+    <div class="about-rule reveal reveal-d2"></div>
+    <a href="#practice" class="cta-link reveal reveal-d2">
+      <span data-en="Explore our practice areas" data-es="Ver nuestras areas de practica">Explore our practice areas</span>
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M11 1l4 4-4 4M0 5h15" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- PRACTICE -->
+<section id="practice">
+  <div class="sticky-label reveal">
+    <div class="sl-num">02</div>
+    <div class="sl-text" data-en="Practice" data-es="Practica">Practice</div>
+  </div>
+  <div>
+    <h2 class="practice-heading reveal"
+      data-en="Four <em>areas</em> of focus"
+      data-es="Cuatro <em>areas</em> de especializacion">
+      Four <em>areas</em> of focus
+    </h2>
+    <p class="practice-intro-text reveal reveal-d1"
+      data-en="Specialized counsel across the core disciplines of business law, delivered with partner-level attention from start to finish."
+      data-es="Asesoria especializada en las principales disciplinas del derecho de los negocios, con atencion directa de socios de principio a fin.">
+      Specialized counsel across the core disciplines of business law, delivered with partner-level attention from start to finish.
+    </p>
+    <div class="practice-list reveal reveal-d2">
+      <div class="practice-item">
+        <span class="pi-num">01</span>
+        <div class="pi-body">
+          <div class="pi-name" data-en="Mergers &amp; Acquisitions" data-es="Fusiones y Adquisiciones">Mergers &amp; Acquisitions</div>
+          <p class="pi-desc" data-en="Full-cycle M&amp;A advisory: due diligence, deal structuring, negotiation, and closing. Recognized by Leaders League." data-es="Asesoria integral en M&amp;A: due diligence, estructuracion, negociacion y cierre. Reconocidos por Leaders League.">Full-cycle M&amp;A advisory: due diligence, deal structuring, negotiation, and closing. Recognized by Leaders League.</p>
+        </div>
+        <span class="pi-arrow">&#8594;</span>
+      </div>
+      <div class="practice-item">
+        <span class="pi-num">02</span>
+        <div class="pi-body">
+          <div class="pi-name" data-en="Tax Law &amp; Structuring" data-es="Derecho Tributario">Tax Law &amp; Structuring</div>
+          <p class="pi-desc" data-en="Corporate taxation, international tax planning, cross-border structures, transfer pricing, and compliance. Ranked by ITR World Tax and Best Lawyers." data-es="Tributacion corporativa, planificacion tributaria internacional, estructuras cross-border, precios de transferencia y compliance. Reconocidos por ITR World Tax y Best Lawyers.">Corporate taxation, international tax planning, cross-border structures, transfer pricing, and compliance. Ranked by ITR World Tax and Best Lawyers.</p>
+        </div>
+        <span class="pi-arrow">&#8594;</span>
+      </div>
+      <div class="practice-item">
+        <span class="pi-num">03</span>
+        <div class="pi-body">
+          <div class="pi-name" data-en="Real Estate &amp; Development" data-es="Derecho Inmobiliario">Real Estate &amp; Development</div>
+          <p class="pi-desc" data-en="Structuring and development of real estate projects, investment vehicles, and property transactions. Recognized by Best Lawyers." data-es="Estructuracion y desarrollo de proyectos inmobiliarios, vehiculos de inversion y transacciones de propiedades. Reconocidos por Best Lawyers.">Structuring and development of real estate projects, investment vehicles, and property transactions. Recognized by Best Lawyers.</p>
+        </div>
+        <span class="pi-arrow">&#8594;</span>
+      </div>
+      <div class="practice-item">
+        <span class="pi-num">04</span>
+        <div class="pi-body">
+          <div class="pi-name" data-en="Corporate &amp; Regulatory" data-es="Corporativo y Regulatorio">Corporate &amp; Regulatory</div>
+          <p class="pi-desc" data-en="Corporate governance, capital markets, FinTech regulation, compliance programs, business reorganizations, and financial law." data-es="Gobierno corporativo, mercado de capitales, regulacion FinTech, programas de compliance, reorganizacion empresarial y derecho financiero.">Corporate governance, capital markets, FinTech regulation, compliance programs, business reorganizations, and financial law.</p>
+        </div>
+        <span class="pi-arrow">&#8594;</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="sticky-label reveal">
+    <div class="sl-num">03</div>
+    <div class="sl-text" data-en="Our Team" data-es="El Equipo">Our Team</div>
+  </div>
+  <div>
+    <h2 class="practice-heading reveal"
+      data-en="The <em>partners</em>"
+      data-es="Los <em>socios</em>">
+      The <em>partners</em>
+    </h2>
+    <div class="team-cards">
+      <!-- Arie -->
+      <div class="team-card reveal">
+        <div class="tc-bar"></div>
+        <h3 class="tc-name">Arie Misraji</h3>
+        <p class="tc-role" data-en="Founding Partner" data-es="Socio Fundador">Founding Partner</p>
+        <p class="tc-bio"
+          data-en="Arie leads the corporate and real estate practice, advising on M&amp;A, corporate governance, capital markets, regulatory matters, and real estate structures. His work also covers business reorganizations, financial law, and compliance."
+          data-es="Arie lidera la practica corporativa e inmobiliaria del estudio, asesorando en M&amp;A, gobierno corporativo, mercado de capitales, asuntos regulatorios y estructuracion inmobiliaria. Tambien asesora en reorganizacion empresarial, derecho financiero y compliance.">
+          Arie leads the corporate and real estate practice, advising on M&amp;A, corporate governance, capital markets, regulatory matters, and real estate structures. His work also covers business reorganizations, financial law, and compliance.
+        </p>
+        <div class="tc-tags">
+          <span class="tc-tag">M&amp;A</span>
+          <span class="tc-tag" data-en="Real Estate" data-es="Inmobiliario">Real Estate</span>
+          <span class="tc-tag" data-en="Capital Markets" data-es="Mercado de Capitales">Capital Markets</span>
+          <span class="tc-tag" data-en="Corporate" data-es="Corporativo">Corporate</span>
+          <span class="tc-tag">Compliance</span>
+        </div>
+        <div class="tc-awards">
+          <div class="tc-award" data-en="Best Lawyers — Real Estate" data-es="Best Lawyers — Inmobiliario">Best Lawyers — Real Estate</div>
+          <div class="tc-award">Leaders League — M&amp;A</div>
+        </div>
+        <div class="tc-edu">
+          <div class="tc-edu-item"><strong>LL.B.</strong> Universidad de Chile</div>
+          <div class="tc-edu-item"><strong data-en="LL.M., Business Law" data-es="Magister, Derecho de los Negocios">LL.M., Business Law</strong> — Univ. Adolfo Ibanez</div>
+          <div class="tc-edu-item"><strong data-en="Securities Accreditation" data-es="Acreditacion en Valores">Securities Accreditation</strong> — CMF Chile (2017)</div>
+        </div>
+      </div>
+      <!-- Camilo -->
+      <div class="team-card reveal reveal-d1">
+        <div class="tc-bar"></div>
+        <h3 class="tc-name">Camilo Béjar</h3>
+        <p class="tc-role" data-en="Founding Partner" data-es="Socio Fundador">Founding Partner</p>
+        <p class="tc-bio"
+          data-en="Camilo leads the tax practice, with broad expertise across corporate and international tax law. A former Tax Manager at EY and Director of the Tax Group at Albagli Zaliasnik (AZ), he advises on cross-border structures, M&amp;A tax, and compliance."
+          data-es="Camilo dirige la practica tributaria del estudio, con amplia experiencia en tributacion corporativa e internacional. Ex Gerente Tax de EY y ex Director del Grupo Tributario de Albagli Zaliasnik (AZ), asesora en estructuras cross-border, tributacion en M&amp;A y compliance.">
+          Camilo leads the tax practice, with broad expertise across corporate and international tax law. A former Tax Manager at EY and Director of the Tax Group at Albagli Zaliasnik (AZ), he advises on cross-border structures, M&amp;A tax, and compliance.
+        </p>
+        <div class="tc-tags">
+          <span class="tc-tag" data-en="Tax Law" data-es="Derecho Tributario">Tax Law</span>
+          <span class="tc-tag" data-en="International Tax" data-es="Tributacion Internacional">International Tax</span>
+          <span class="tc-tag">M&amp;A Tax</span>
+          <span class="tc-tag">Compliance</span>
+          <span class="tc-tag" data-en="Transfer Pricing" data-es="Precios de Transferencia">Transfer Pricing</span>
+        </div>
+        <div class="tc-awards">
+          <div class="tc-award" data-en="ITR World Tax — Ranked" data-es="ITR World Tax — Reconocido">ITR World Tax — Ranked</div>
+          <div class="tc-award" data-en="Highly Regarded — ITR" data-es="Altamente Recomendado — ITR">Highly Regarded — ITR</div>
+        </div>
+        <div class="tc-edu">
+          <div class="tc-edu-item"><strong>LL.B.</strong> Univ. Diego Portales <span style="opacity:0.6" data-en="(with distinction)" data-es="(con distincion)">(with distinction)</span></div>
+          <div class="tc-edu-item"><strong data-en="M.Sc., Tax Management" data-es="Magister, Gestion Tributaria">M.Sc., Tax Management</strong> — Univ. Adolfo Ibanez</div>
+          <div class="tc-edu-item" data-en="Prior: EY Tax Manager · AZ Tax Director · Tax Law Professor" data-es="Anterior: Gerente Tax EY · Director Tributario AZ · Profesor Tributario">Prior: EY Tax Manager · AZ Tax Director · Tax Law Professor</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECOGNITIONS -->
+<section id="recognitions">
+  <div class="sticky-label reveal">
+    <div class="sl-num">04</div>
+    <div class="sl-text" data-en="Rankings" data-es="Rankings">Rankings</div>
+  </div>
+  <div>
+    <h2 class="recog-heading reveal"
+      data-en="Ranked &amp; <em>recognized</em>"
+      data-es="Presentes en <em>rankings globales</em>">
+      Ranked &amp; <em>recognized</em>
+    </h2>
+    <div class="recog-grid">
+      <div class="recog-card reveal">
+        <div class="rc-org">Leaders League</div>
+        <div class="rc-award" data-en="Mergers &amp; Acquisitions" data-es="Fusiones y Adquisiciones">Mergers &amp; Acquisitions</div>
+        <div class="rc-detail" data-en="Recognized for M&amp;A work across Latin America, led by partner Arie Misraji." data-es="Reconocidos por su trabajo en M&amp;A en America Latina, liderado por el socio Arie Misraji.">Recognized for M&amp;A work across Latin America, led by partner Arie Misraji.</div>
+      </div>
+      <div class="recog-card reveal reveal-d1">
+        <div class="rc-org">Best Lawyers</div>
+        <div class="rc-award" data-en="Real Estate Practice" data-es="Practica Inmobiliaria">Real Estate Practice</div>
+        <div class="rc-detail" data-en="Recognized for real estate development, structuring, and investment transactions." data-es="Reconocidos por desarrollo, estructuracion y transacciones inmobiliarias de inversion.">Recognized for real estate development, structuring, and investment transactions.</div>
+      </div>
+      <div class="recog-card reveal reveal-d2">
+        <div class="rc-org">ITR World Tax</div>
+        <div class="rc-award" data-en="General Corporate Tax" data-es="Tributacion Corporativa">General Corporate Tax</div>
+        <div class="rc-detail" data-en='Camilo Béjar listed as "Highly Regarded" in General Corporate and Indirect Tax.' data-es='Camilo Béjar reconocido como "Highly Regarded" en Tributacion Corporativa e Impuestos Indirectos.'>Camilo Béjar listed as "Highly Regarded" in General Corporate and Indirect Tax.</div>
+      </div>
+      <div class="recog-card reveal reveal-d3">
+        <div class="rc-org">Universidad Adolfo Ibanez</div>
+        <div class="rc-award" data-en="Legal Entrepreneurship" data-es="Emprendimiento Legal">Legal Entrepreneurship</div>
+        <div class="rc-detail" data-en="Both partners invited as speakers on the new boutique law firm model in Chile." data-es="Ambos socios invitados como expositores sobre el nuevo modelo de estudio boutique en Chile.">Both partners invited as speakers on the new boutique law firm model in Chile.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div>
+    <h2 class="contact-heading reveal">
+      <span data-en="Talk to" data-es="Hablemos">Talk to</span><br>
+      <em data-en="us" data-es="">us</em>
+    </h2>
+    <p class="contact-sub reveal reveal-d1"
+      data-en="We work directly with our clients. Write to us and one of our founding partners will respond personally."
+      data-es="Trabajamos de manera directa con nuestros clientes. Escribanos y uno de nuestros socios fundadores le respondera personalmente.">
+      We work directly with our clients. Write to us and one of our founding partners will respond personally.
+    </p>
+    <div class="contact-rust-rule reveal reveal-d2"></div>
+    <a href="mailto:contacto@mba.legal" class="cta-link reveal reveal-d2">
+      <span data-en="Send us a message" data-es="Envienos un mensaje">Send us a message</span>
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M11 1l4 4-4 4M0 5h15" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+  <div class="contact-details reveal reveal-d1">
+    <div class="cd-block">
+      <div class="cd-label" data-en="Telephone" data-es="Telefono">Telephone</div>
+      <div class="cd-value"><a href="tel:+56225830123">+56 2 2583 0123</a></div>
+    </div>
+    <div class="cd-block">
+      <div class="cd-label">Email</div>
+      <div class="cd-value"><a href="mailto:contacto@mba.legal">contacto@mba.legal</a></div>
+    </div>
+    <div class="cd-block">
+      <div class="cd-label" data-en="Office" data-es="Oficina">Office</div>
+      <div class="cd-value">
+        Av. Kennedy 4700, Of. 1002<br>
+        Vitacura, Santiago
+      </div>
+      <div class="cd-hint">Torre Kennedy · Vitacura Business District</div>
+    </div>
+    <div class="cd-block">
+      <div class="cd-label" data-en="Direct contact" data-es="Contacto directo">Direct contact</div>
+      <div class="cd-value" style="font-size:1rem;line-height:2;">
+        <a href="mailto:arie@mba.legal" style="display:block;">arie@mba.legal <span style="font-size:0.7rem;color:var(--stone)">— Arie Misraji</span></a>
+        <a href="mailto:camilo@mba.legal">camilo@mba.legal <span style="font-size:0.7rem;color:var(--stone)">— Camilo Béjar</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span data-en="&copy; 2026 Misraji &amp; Béjar Abogados. All rights reserved." data-es="&copy; 2026 Misraji &amp; Béjar Abogados. Todos los derechos reservados.">&copy; 2026 Misraji &amp; Béjar Abogados. All rights reserved.</span>
+  <span>mba.legal</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Nav shadow on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+  // Language
+  const langBtns = document.querySelectorAll('.lang-btn');
+  function applyLang(lang) {
+    document.documentElement.lang = lang;
+    langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    document.querySelectorAll('[data-en]').forEach(el => {
+      if (el.classList.contains('lang-btn')) return;
+      const val = el.getAttribute('data-' + lang);
+      if (val == null) return;
+      // Elements that may carry HTML (em, &amp; etc)
+      const htmlTags = ['H2','P','DIV','BLOCKQUOTE','CITE','SPAN','A','LI'];
+      if (htmlTags.includes(el.tagName) && !el.querySelector('svg')) {
+        el.innerHTML = val;
+      } else if (!el.querySelector('svg')) {
+        el.textContent = val;
+      }
+    });
+  }
+  langBtns.forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
+</script>
+</body>
+</html>
